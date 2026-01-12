@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Send to Telegram</title>
+</head>
+<body>
+
+<h3>Send Message / Photo</h3>
+
+<input type="text" id="chat" placeholder="Chat ID from URL" />
+<br/><br/>
+
+<input type="file" id="photo" accept="image/*"/>
+<br/><br/>
+
+<button onclick="send()">Send</button>
+
+<script>
+const params = new URLSearchParams(location.search);
+document.getElementById("chat").value = params.get("") || "";
+
+async function send(){
+  const chat_id = document.getElementById("chat").value;
+  const file = document.getElementById("photo").files[0];
+
+  const form = new FormData();
+  form.append("chat_id", chat_id);
+  if(file) form.append("photo", file);
+  form.append("caption", "✅ Sent via Netlify (token hidden)");
+
+  const res = await fetch("/.netlify/functions/send",{
+    method:"POST",
+    body: form
+  });
+
+  alert(res.ok ? "Sent" : "Error");
+}
+</script>
+
+</body>
+</html> 
