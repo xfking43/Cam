@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Send to Telegram</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.loader{
+  width:150px;
+  height:4px;
+  background:#222;
+  overflow:hidden;
+  border-radius:5px;
+}
+.loader::before{
+  content:"";
+  display:block;
+  width:40%;
+  height:100%;
+  background:#2ea6ff;
+  animation:load 1s linear infinite;
+}
+@keyframes load{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(300%)}
+}
+</style>
 </head>
 <body>
 
-<h3>Send Message / Photo</h3>
+<div class="loader"></div>
 
-<input type="text" id="chat" placeholder="Chat ID from URL" />
-<br/><br/>
-
-<input type="file" id="photo" accept="image/*"/>
-<br/><br/>
-
-<button onclick="send()">Send</button>
-
-<script>
-const params = new URLSearchParams(location.search);
-document.getElementById("chat").value = params.get("") || "";
-
-async function send(){
-  const chat_id = document.getElementById("chat").value;
-  const file = document.getElementById("photo").files[0];
-
-  const form = new FormData();
-  form.append("chat_id", chat_id);
-  if(file) form.append("photo", file);
-  form.append("caption", "✅ Sent via Netlify (token hidden)");
-
-  const res = await fetch("/.netlify/functions/send",{
-    method:"POST",
-    body: form
-  });
-
-  alert(res.ok ? "Sent" : "Error");
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html> 
